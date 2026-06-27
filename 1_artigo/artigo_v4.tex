@@ -1,0 +1,757 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage[expansion=false]{microtype}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{abstract}
+\usepackage{authblk}
+
+\title{\textbf{Cosseno 0,99 não é compreensão:\\
+\large anisotropia, polaridade e a competência jurídica\\
+diante da recuperação densa}}
+
+\author[ ]{Pedro Borges Mourão}
+\affil[ ]{\small Promotor de Justiça, Mestre em Direito, Especialista em Segurança da Informação\\
+e pesquisador na interseção entre Direito, inteligência artificial e forense digital.}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% ======================================================================
+\begin{abstract}
+\noindent
+Circula entre operadores do Direito a suposição de que dominar uma ferramenta de
+inteligência artificial é uma questão de aprender comandos. Este artigo argumenta
+que essa suposição é falsa e que seu custo não é a ineficiência, mas a confiança
+indevida em sistemas cujo modo de falha é invisível para quem não entende como
+eles representam a linguagem. O componente que examinamos é a recuperação densa
+por \textit{sentence embeddings}, base dos sistemas de busca jurídica e dos
+\textit{pipelines} de geração aumentada por recuperação (RAG). Construímos um
+conjunto de 40 pares mínimos forenses em português e medimos quatro modelos
+abertos, de três modelos consolidados (MiniLM, mpnet, distiluse) a um modelo de
+fronteira (multilingual-e5-large). O achado central é contraintuitivo e tem
+consequência prática direta. Os modelos preservam a polaridade --- a distinção
+entre afirmação e negação, entre polo ativo e passivo --- como um sinal
+estruturalmente fraco, e a fraqueza é mais severa não na negação adverbial, mas
+na inversão de polo processual (autor\,$\leftrightarrow$\,réu). Esse padrão
+\emph{atravessa as gerações de modelos}: ele aparece nos três modelos antigos e
+reaparece, idêntico, no modelo de fronteira quando se corrige a geometria do
+espaço. O modelo de fronteira, porém, opera em um regime fortemente
+\emph{anisotrópico} --- a similaridade de cosseno entre duas sentenças jurídicas
+quaisquer, ainda que sem relação, é de $0{,}84$ --- de modo que ele atribui a uma
+sentença e à sua negação um cosseno bruto de $0{,}99$. Normalizada pelo
+\textit{baseline} anisotrópico, a discriminação reaparece e é, em termos
+relativos, \emph{menor} que a dos modelos antigos ($\textit{gap}$ normalizado de
+$0{,}09$ contra $0{,}27$); no estrato mais severo, a inversão de polo
+(autor\,$\leftrightarrow$\,réu), o \textit{gap} chega a ser \emph{negativo} --- o
+e5 considera a tese e sua inversão mais próximas entre si do que duas paráfrases
+legítimas. Na tarefa de recuperação, o modelo de fronteira acerta
+\emph{mais} ($10/10$ contra $8/10$), porém por uma margem de cosseno cujo mínimo
+é de cinco milésimos. A conclusão inverte a intuição corrente: o progresso da
+engenharia de \textit{embeddings} não tornou a polaridade mais robusta, mas
+deslocou sua fragilidade para um regime onde o operador, lendo um cosseno de
+$0{,}99$, conclui certeza máxima exatamente onde a discriminação é mais precária.
+A modernização do modelo disfarçou a armadilha. Reconhecê-la exige uma
+alfabetização linguística e geométrica que a formação jurídica não fornece. Todo
+o material é reproduzível.
+
+\vspace{0.6em}
+\noindent\textbf{Palavras-chave:} inteligência artificial jurídica; recuperação
+densa; \textit{embeddings}; anisotropia; polaridade; geração aumentada por
+recuperação; prova digital.
+\end{abstract}
+
+% ======================================================================
+\section{Introdução: uma suposição confortável e cara}
+
+Há uma suposição confortável circulando nos escritórios e órgãos públicos que
+operam a justiça no Brasil: a de que dominar uma ferramenta de inteligência
+artificial é uma questão de aprender comandos, como quem aprende os atalhos de
+um editor de texto. Descobre-se o botão certo, memorizam-se algumas fórmulas de
+prompt e, pronto, está-se operando. Essa suposição é falsa, e o custo de
+mantê-la não é a ineficiência. É a confiança indevida em um sistema cujo modo de
+falha o operador não enxerga.
+
+O argumento deste texto é específico, e convém delimitá-lo com precisão para que
+não seja confundido com uma crítica genérica à IA. Não se defende que advogados
+aprendam técnica de prompt. O objeto que examinamos é um componente preciso da
+infraestrutura de IA jurídica: a \emph{recuperação densa por
+\textit{embeddings}}, isto é, o mecanismo que converte peças e consultas em
+vetores numéricos e os compara por similaridade. Esse componente é o coração dos
+sistemas de busca jurisprudencial modernos e a primeira etapa dos
+\textit{pipelines} de geração aumentada por recuperação (RAG), que alimentam o
+modelo gerativo com os documentos que ele usará para responder. Se essa etapa
+entrega ao gerador o documento de sentido invertido --- o precedente que
+contradiz a tese, em vez do que a sustenta ---, todo o restante do sistema opera
+sobre material corrompido na origem. É essa etapa, e não a geração de texto em si,
+que este artigo diagnostica.
+
+A contribuição é dupla. Primeiro, ela mede empiricamente, em português jurídico,
+como esse componente trata a polaridade, e mostra que a fragilidade observada não
+é defeito de um modelo específico, mas propriedade estrutural que atravessa
+gerações. Segundo, e é o achado que reorganiza o artigo, ela demonstra que o
+progresso tecnológico não eliminou essa fragilidade: deslocou-a para um regime
+geométrico onde ela se torna mais difícil de perceber. O operador que conclui
+``máxima confiança'' diante de um escore de similaridade altíssimo está, nesse
+regime, cometendo precisamente o erro que a competência jurídica não o ensina a
+evitar.
+
+% ======================================================================
+\section{O caso que expõe a natureza do problema}
+\label{sec:caso}
+
+Tomem-se duas frases que dizem o oposto uma da outra: ``o réu compareceu à
+audiência'' e ``o réu não compareceu à audiência''. Para um operador do Direito,
+essas frases são antípodas. A presença ou ausência do réu muda o procedimento,
+dispara ou não a revelia (art.~344 do CPC), pode redesenhar o ônus da prova. A
+diferença entre elas é a diferença entre dois processos.
+
+Submetam-se essas duas frases a um modelo de \textit{embedding}. A similaridade
+que o modelo atribui ao par é alta. A causa do fenômeno precede qualquer
+arquitetura específica: a representação distribucional do significado, formulada
+por Zellig Harris em 1954, segundo a qual o significado de uma palavra é capturado
+pelos contextos em que ela aparece \cite{harris1954}. Modelos de \textit{embedding}
+aprendem que ``compareceu'' e ``não compareceu'' significam coisas parecidas
+porque aparecem em contextos textuais quase idênticos. O advérbio de negação é,
+para a estatística distribucional, uma perturbação mínima no contexto. Para o
+Direito, é a inversão completa do sentido.
+
+A questão empírica que organiza o restante do artigo tem três camadas, e
+mantê-las separadas é a principal exigência metodológica. A primeira: \emph{quão}
+alta é essa similaridade, comparada à de uma paráfrase legítima, quando se isola a
+sobreposição lexical? A segunda: esse comportamento muda com a geração do modelo,
+ou modelos de fronteira o corrigem? A terceira, que se revelou decisiva: a
+similaridade absoluta sequer é a métrica certa, dado que o espaço vetorial pode
+ser geometricamente enviesado? As três camadas correspondem às três contribuições
+empíricas das Seções~\ref{sec:resultados} e \ref{sec:aniso}.
+
+% ======================================================================
+\section{Método}
+\label{sec:metodo}
+
+\subsection{Pares mínimos e o problema do controle}
+
+Um \emph{par mínimo} compartilha quase toda a superfície lexical e difere em um
+ponto que inverte o sentido. Construímos 40 pares em português jurídico,
+estratificados pelo \emph{mecanismo} de inversão (Tabela~\ref{tab:estratos}).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Estrato & $n$ & Exemplo (frase A / frase B) \\
+\midrule
+Negação adverbial & 6 & \emph{O réu compareceu\ldots} / \emph{O réu não compareceu\ldots} \\
+Antonímia de núcleo & 6 & \emph{\ldots foi deferido} / \emph{\ldots foi indeferido} \\
+Inversão de polo & 16 & \emph{O autor deve indenizar o réu} / \emph{O réu deve indenizar o autor} \\
+Quantificador/modal & 4 & \emph{Todos os requisitos\ldots} / \emph{Nenhum dos requisitos\ldots} \\
+Controle pareado & 8 & \emph{\ldots foi indeferido} / \emph{\ldots foi rejeitado} \\
+\bottomrule
+\end{tabular}
+\caption{Estratos do conjunto. O estrato de \emph{inversão de polo} foi ampliado
+para $n=16$ por concentrar o efeito mais forte. Os oito pares de \emph{controle}
+são paráfrases legítimas, lexicalmente pareadas aos contrastivos (Jaccard
+$0{,}79$ vs $0{,}75$), de modo que a comparação difere apenas na variável de
+interesse: preserva \emph{versus} inverte o sentido.}
+\label{tab:estratos}
+\end{table}
+
+\subsection{Modelos, medida e as três camadas de análise}
+
+Medimos quatro modelos abertos de \textit{sentence embedding} multilíngues:
+três consolidados e amplamente usados em produção --- \texttt{paraphrase\-multilingual\-MiniLM\-L12\-v2}, \texttt{paraphrase\-multilingual\-mpnet\-base\-v2} e
+\texttt{distiluse\-base\-multilingual\-cased\-v2} --- e um modelo de fronteira,
+\texttt{multilingual\-e5\-large}, treinado com aprendizado contrastivo em larga
+escala, da biblioteca \texttt{sentence-transformers} \cite{reimers2019}. O e5
+exige prefixos \texttt{query:}/\texttt{passage:}; aplicamo-los de forma simétrica
+(\texttt{query:} em ambas as sentenças) na medição intrínseca e assimétrica na
+recuperação, conforme o treino do modelo.\footnote{A escolha do prefixo
+\texttt{query:} para a medição intrínseca segue a instrução oficial dos autores do
+e5, que recomendam esse prefixo para tarefas \emph{simétricas} como similaridade
+semântica e recuperação de paráfrases, reservando o par \texttt{query:}/\texttt{passage:}
+para tarefas assimétricas de recuperação de passagens longas. A anisotropia
+observada não é, ademais, artefato da escolha de prefixo: os próprios autores
+atribuem a concentração dos escores de cosseno na faixa de $0{,}7$ a $1{,}0$ ao
+uso de temperatura baixa ($0{,}01$) na perda contrastiva InfoNCE, propriedade do
+treino que independe do prefixo. O \textit{script} de replicação inclui a
+verificação direta do \textit{baseline} sob ambos os protocolos.}
+
+A análise tem três camadas. A camada \emph{intrínseca} mede o cosseno entre uma
+sentença e sua negação. A camada \emph{geométrica} mede o \textit{baseline}
+anisotrópico --- o cosseno médio entre sentenças jurídicas sem relação --- e
+normaliza por ele. A camada \emph{extrínseca} mede, numa tarefa de recuperação,
+se a sentença correta é rankeada acima da oposta. As três são necessárias porque,
+como a Seção~\ref{sec:aniso} demonstra, a camada intrínseca isolada conduz a
+conclusões erradas em espaços anisotrópicos. Toda comparação agregada acompanha
+intervalo de confiança de 95\% por \textit{bootstrap} ($5{.}000$ reamostragens). A
+execução é determinística e reproduzível.
+
+% ======================================================================
+\section{Resultados: a fragilidade da polaridade atravessa as gerações}
+\label{sec:resultados}
+
+A Tabela~\ref{tab:matriz} e a Figura~\ref{fig:heat} reportam o cosseno bruto por
+modelo e estrato. Dois fatos se mantêm em todos os modelos. Primeiro, a negação
+adverbial é o estrato \emph{menos} problemático --- a presença do marcador ``não''
+dá ao modelo um sinal lexical a que se agarrar. Segundo, a inversão de polo é o
+estrato \emph{mais} severo: trocar ``autor'' por ``réu'', dois \textit{tokens} de
+altíssima frequência em contextos idênticos, produz o cosseno mais alto em todos
+os quatro modelos, chegando a $0{,}993$ no e5.
+
+\begin{table}[H]
+\centering
+\small
+\input{v3_tabela.tex}
+\caption{Cosseno bruto por estrato e modelo, com o \textit{baseline} anisotrópico
+de cada espaço na última linha. Note o salto do \textit{baseline}: $0{,}07$ nos
+modelos antigos, $0{,}84$ no e5.}
+\label{tab:matriz}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{v3_figA.pdf}
+\caption{Cosseno bruto dos quatro modelos. O e5 esmaga todos os estratos perto de
+$0{,}99$, inclusive os contrastivos. Lido ingenuamente, isso sugeriria que o e5 é
+o \emph{pior} modelo --- conclusão que a Seção~\ref{sec:aniso} mostra ser um
+artefato geométrico.}
+\label{fig:heat}
+\end{figure}
+
+A leitura ingênua da Figura~\ref{fig:heat} seria que o e5, por dar cosseno mais
+alto aos pares opostos, é o mais cego à polaridade. Essa leitura é falsa, e o erro
+que ela comete é exatamente o erro que o operador jurídico comete diante da
+ferramenta. Corrigi-lo exige tratar a geometria do espaço.
+
+% ======================================================================
+\section{A anisotropia muda o que o cosseno significa}
+\label{sec:aniso}
+
+\subsection{O fenômeno}
+
+Em espaços vetoriais de alta dimensão produzidos por transformadores, os vetores
+tendem a se concentrar em um cone estreito, em vez de se distribuírem pela esfera.
+Essa propriedade, a \emph{anisotropia}, foi caracterizada por Ethayarajh
+\cite{ethayarajh2019} e faz com que sentenças sem qualquer relação semântica
+exibam cosseno alto. A consequência é direta: em um espaço anisotrópico, o valor
+absoluto do cosseno deixa de ser interpretável, e apenas a posição \emph{relativa}
+ao \textit{baseline} do espaço carrega informação. O fenômeno é especialmente
+pronunciado em modelos multilíngues \cite{hammerl2023}.
+
+Medimos o \textit{baseline} de cada modelo como o cosseno médio entre sentenças
+jurídicas não relacionadas. O resultado separa as duas gerações de forma nítida:
+o \textit{baseline} dos três modelos antigos fica entre $0{,}07$ e $0{,}14$ ---
+espaços praticamente isotrópicos ---, ao passo que o do e5 é de $0{,}84$. No
+espaço do e5, duas sentenças jurídicas quaisquer já partem de uma similaridade de
+$0{,}84$; o cosseno de $0{,}99$ entre uma sentença e sua negação representa, sobre
+essa base, um acréscimo pequeno. Dizer que o e5 ``vê as duas frases como $99\%$
+idênticas'' é, portanto, um erro de leitura: ele vê quase tudo como muito similar,
+e a pergunta correta é quanto a polaridade desloca o vetor \emph{acima} desse piso.
+
+\subsection{Normalização e o reaparecimento da estrutura}
+
+Para tornar os modelos comparáveis, normalizamos o cosseno pelo \textit{baseline}
+de cada espaço, seguindo o procedimento de pares mínimos de Lin e Chen
+\cite{heros2023}: a similaridade normalizada remapeia o \textit{baseline} para
+zero, isolando o sinal semântico acima do ruído geométrico. A
+Figura~\ref{fig:central} mostra o efeito no e5. À esquerda, o cosseno bruto:
+indistinguível a olho nu, tudo entre $0{,}96$ e $0{,}99$. À direita, o cosseno
+normalizado: a estrutura reaparece, e é a \emph{mesma} estrutura dos modelos
+antigos --- a negação adverbial discriminada ($0{,}74$), a inversão de polo colada
+no controle ($0{,}96$ contra $0{,}94$).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{v3_figB.pdf}
+\caption{O achado central. À esquerda, o que o operador vê: cosseno bruto do e5,
+uniforme perto de $0{,}99$. À direita, o que de fato ocorre: removida a
+anisotropia, a inversão de polo (azul) praticamente não se separa do controle de
+paráfrase (verde). A fragilidade estava lá, oculta pela geometria.}
+\label{fig:central}
+\end{figure}
+
+O dado que sintetiza o argumento é o \textit{gap} normalizado entre contrastivos e
+controle. Nos modelos antigos, medido sobre o mesmo corpus jurídico, o \textit{gap}
+do MiniLM é de $0{,}27$. No e5, é de $0{,}09$. Em termos relativos, descontada a
+geometria, o modelo de fronteira discrimina a polaridade \emph{menos} que o modelo
+antigo, não mais. O aprendizado contrastivo em larga escala, que a intuição
+supõe ter ``resolvido'' a insensibilidade ao sentido, não a resolveu para a
+inversão de polo; apenas a transferiu para um regime onde ela é mais difícil de
+detectar. Esse $0{,}09$ é a média de todos os estratos contrastivos; quando se
+isola a inversão de polo, o estrato mais severo, o \textit{gap} torna-se
+\emph{negativo} (Seção~\ref{sec:limita}) --- o e5 chega a considerar a tese e sua
+inversão mais próximas entre si do que duas paráfrases legítimas.
+
+% ======================================================================
+\section{O paradoxo: o modelo que acerta mais esconde melhor a fragilidade}
+\label{sec:paradoxo}
+
+Poder-se-ia objetar que tudo isso é geometria sem consequência, desde que a
+recuperação funcione. Medimos, então, a tarefa-fim: para 10 consultas temáticas,
+com a sentença correta, sua oposta e doze distratores no corpus, o modelo rankeia
+a correta acima da oposta? A Figura~\ref{fig:paradoxo} reporta o resultado, e ele
+é o ponto mais importante do artigo.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.86\textwidth]{v3_figC.pdf}
+\caption{O paradoxo do e5. Em azul, o acerto de \textit{ranking}: o e5 acerta
+\emph{mais} ($10/10$) que os modelos antigos ($8/10$). Em vermelho, a margem
+mínima de cosseno que sustenta esses acertos: no e5 ela é de cinco milésimos. O
+modelo melhor na tarefa é o que opera mais perto da indistinção.}
+\label{fig:paradoxo}
+\end{figure}
+
+O e5 é o melhor dos quatro na tarefa de recuperação: acerta todos os dez casos,
+contra oito dos modelos antigos, e nunca rankeia a oposta acima da correta. Mas a
+margem de cosseno que separa a correta da oposta é, no e5, de $0{,}005$ no pior
+caso --- sete vezes menor que a do MiniLM. O modelo que mais acerta é o que decide
+por margens mais finas, embutidas num espaço onde o cosseno absoluto de tudo é
+$0{,}99$.
+
+Esta é a armadilha, e é estritamente o erro que a competência jurídica não
+previne. O operador que projeta ou contrata um sistema de busca, ao comparar
+modelos, vê o e5 entregar similaridades de $0{,}99$ e conclui que ele ``entende''
+os documentos com altíssima confiança. O que ele não vê é que essa confiança
+aparente repousa sobre uma discriminação de polaridade de cinco milésimos, que é a
+primeira coisa a colapsar sob qualquer perturbação realista --- um documento mais
+longo que dilui o peso dos \textit{tokens} de polo, uma consulta ambígua, um
+\textit{reranker} mal calibrado, ruído de OCR. O estudo de Stanford sobre
+ferramentas jurídicas, no nível do produto, observa que documentos apenas
+textualmente parecidos são recuperados como relevantes e degradam a resposta
+\cite{magesh2025}; nossos resultados localizam, no componente de \textit{embedding}
+e na sua geometria, um dos mecanismos desse fenômeno, e mostram que ele se agrava,
+em vez de desaparecer, à medida que os modelos avançam --- porque o avanço vem
+acompanhado de maior anisotropia.
+
+% ======================================================================
+\section{A inversão de polo resiste à atenção cruzada}
+\label{sec:cross}
+
+Poder-se-ia esperar que o problema da polaridade fosse específico do bi-encoder,
+que comprime cada sentença em um vetor isolado antes de compará-las, e que uma
+arquitetura que processasse o par \emph{conjuntamente} o resolvesse. Testamos essa
+hipótese submetendo os 40 pares a um \textit{cross-encoder} de inferência de
+linguagem natural, \texttt{nli-deberta-v3-base}, que recebe as duas sentenças ao
+mesmo tempo, com atenção cruzada entre todos os \textit{tokens}, e as classifica
+como \emph{contradição}, \emph{implicação} ou \emph{neutro}. Se a distinção de
+polaridade fosse recuperável por atenção conjunta, esperaríamos que todos os pares
+contrastivos fossem classificados como contradição e o controle de paráfrase, não.
+
+A Tabela~\ref{tab:cross} e a Figura~\ref{fig:cross} mostram que essa expectativa se
+confirma para a maioria dos estratos, mas falha exatamente onde o bi-encoder
+também falha pior. A negação adverbial e os quantificadores são detectados como
+contradição em $100\%$ dos casos ($6/6$ e $4/4$); a antonímia de núcleo, em
+$5/6$. O controle de paráfrase é corretamente \emph{não} classificado como
+contradição ($2/8$), validando o instrumento. A inversão de polo, porém, é
+detectada como contradição em apenas $9$ de $16$ casos.
+
+\begin{table}[H]
+\centering
+\small
+\input{v4_crossenc_tabela.tex}
+\caption{Classificação do \textit{cross-encoder} NLI por estrato. A inversão de
+polo é a única em que a detecção de contradição falha sistematicamente, e o modo
+de falha é revelador: 6 dos 16 pares são classificados como \emph{implicação}.}
+\label{tab:cross}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{v4_crossenc.pdf}
+\caption{Distribuição das classificações do \textit{cross-encoder} por estrato. A
+fatia laranja na inversão de polo --- pares lidos como \emph{implicação} --- é o
+sintoma de que a arquitetura não modela papéis temáticos.}
+\label{fig:cross}
+\end{figure}
+
+O modo de falha importa mais que a taxa. Dos sete pares de inversão de polo não
+detectados como contradição, seis foram classificados como \emph{implicação}:
+o modelo julga que ``o autor deve indenizar o réu'' \emph{implica} ``o réu deve
+indenizar o autor''. Isto não é ruído estatístico; é a manifestação precisa de
+que a inversão de polo não é uma contradição lógico-formal --- ambas as sentenças
+podem ser verdadeiras em situações distintas --- e sim uma inversão referencial de
+papéis que nenhuma das arquiteturas testadas, nem o bi-encoder por similaridade
+nem o \textit{cross-encoder} por inferência, representa adequadamente. A
+consequência para o argumento central é direta: a fragilidade da polaridade de
+papel não é um artefato da compressão vetorial que um modelo conjunto corrigiria.
+É mais profunda, e atravessa também o paradigma de inferência.
+
+
+
+O operador poderia reagir dizendo: ``então preciso de um engenheiro que use o
+melhor modelo''. A reação é exatamente a errada, e os dados mostram por quê. O
+``melhor'' modelo, pela métrica que o operador sabe ler, é o que mais disfarça a
+fragilidade. Não se trata de um defeito que uma engenharia melhor elimina, e sim
+de uma propriedade da escolha de representar significado por proximidade
+distribucional num único vetor --- escolha que é, para os modelos de recuperação
+densa que aqui medimos, simultaneamente a fonte de seu poder e a fonte de suas
+falhas de polaridade. Cabe delimitar o alcance dessa afirmação. Ela não vale para
+modelos generativos autoregressivos, cujo comportamento é moldado também por
+camadas de otimização que não se aplicam a um \textit{embedding} --- ajuste por
+reforço com preferência humana, alinhamento constitucional, computação inferencial
+em tempo de execução --- e cujas falhas têm, por isso, outras fontes além da
+geometria distribucional. O objeto deste artigo é o componente de busca, não o
+gerador: um \textit{sentence embedding} não possui política de geração, modelo de
+recompensa nem cadeia de raciocínio; ele projeta texto em um vetor, e é nessa
+projeção que a polaridade se perde. A polaridade referencial, em particular a
+inversão de polo, resiste a tudo o que testamos nesse componente: aos quatro
+modelos, ao aprendizado contrastivo do e5, e mesmo a uma arquitetura de atenção
+cruzada, como a Seção~\ref{sec:cross} documenta em detalhe. O problema não é de
+modelo. É de como a linguagem representa papéis e negações, e de como essa
+representação sobrevive, ou não, à compressão vetorial.
+
+Nenhuma dessas camadas é visível para quem opera o sistema como um buscador.
+Todas são previsíveis para quem entende que está lidando com um modelo estatístico
+de linguagem, e agora com a geometria do espaço em que esse modelo vive. A
+diferença entre o operador competente e o exposto não é a quantidade de prompts
+que conhece. É a presença ou ausência de um modelo mental correto do que a máquina
+faz com a linguagem e do que um número de similaridade significa.
+
+% ======================================================================
+\section{A escala do dano já documentada}
+
+Quem considera isto teórico não acompanhou os números. Um estudo da Stanford
+RegLab sobre alucinação jurídica em modelos de propósito geral encontrou taxas
+entre 58\% e 82\%, com desempenho em doutrina substantiva que mal supera o chute
+aleatório \cite{dahl2024}. Avaliando ferramentas dedicadas que ancoram respostas
+por recuperação aumentada, um segundo estudo ainda registrou 17\% de alucinação no
+Lexis+~AI e 33\% no Westlaw \cite{magesh2025}. Recuperação aumentada reduz o
+problema; não o elimina. E se a etapa de \textit{embedding} preserva a polaridade
+por margem de milésimos, a recuperação que alimenta o gerador pode entregar o
+precedente de sentido invertido, sobre o qual o modelo gerativo então constrói uma
+resposta fluente e confiante.
+
+E há o caso fundador. Em \emph{Mata v.\ Avianca}, dois advogados protocolaram uma
+peça com seis citações geradas por IA; nenhuma existia. Quando um deles pediu ao
+modelo que confirmasse se eram reais, ele confirmou \cite{mata2023}. O sistema não
+mentiu: gerou a continuação estatisticamente mais provável para ``essas citações
+são reais?'', que era a confirmação. O operador leu espelhamento como verificação.
+O erro tem a mesma forma do erro de ler cosseno $0{,}99$ como compreensão: em ambos
+os casos, uma propriedade estatística do sistema é interpretada como um ato
+cognitivo que ele não realizou. Registre-se que a geração de texto envolve camadas
+de otimização adicionais --- alinhamento por preferência, raciocínio inferencial ---
+que este artigo não mede e cujas contribuições para o erro são objeto de outra
+literatura; o ponto aqui é apenas que a \emph{forma} do equívoco do operador, tomar
+estatística por cognição, reaparece nos dois extremos do \textit{pipeline}, da
+recuperação à geração.
+
+A lição não é ``a IA erra''. É que os erros têm uma gramática, e que ela é também
+geométrica. Quem a conhece sabe onde o sistema é frágil: na polaridade, com
+severidade máxima na inversão de polo; sob anisotropia, onde a fragilidade se
+esconde atrás de escores altos. O operador alfabetizado não confia menos de modo
+difuso; desconfia de modo cirúrgico, nos pontos exatos onde a arquitetura e a
+geometria preveem a falha.
+
+% ======================================================================
+\section{Verificação por raciocínio: a pergunta importa mais que o modelo}
+\label{sec:reasoning}
+
+A Seção~\ref{sec:cross} mostrou que a inversão de polo resiste a um
+\textit{cross-encoder} de inferência. Cabe perguntar se os modelos generativos de
+raciocínio --- a geração que sucede a recuperação em um \textit{pipeline} RAG, e
+que a Seção~\ref{sec:limita} delimita como fora do objeto de medição deste artigo
+--- conseguem, quando usados como passo explícito de \emph{verificação} sobre o
+mesmo fenômeno, capturar a inversão que o \textit{embedding} e o
+\textit{cross-encoder} perdem. A questão não é se um modelo de raciocínio
+substitui a recuperação, e sim se ele repara, a jusante, a falha de polaridade que
+a recuperação deixa passar. O experimento que segue continua, portanto, a
+investigação sobre a inversão de polo iniciada na Seção~\ref{sec:resultados}, agora
+em uma terceira arquitetura.
+
+Submetemos os 16 pares de inversão de polo a três modelos generativos de uma
+mesma família, cobrindo um eixo de capacidade e custo --- de um modelo econômico a
+um modelo de fronteira --- sob \emph{duas formulações} da mesma tarefa. A primeira
+replica a pergunta do \textit{cross-encoder}: ``estas frases se contradizem?''. A
+segunda pergunta pela estrutura argumental: ``a posição das partes foi trocada, ou
+cada parte conserva o mesmo papel?''. A distinção é teórica antes de ser empírica:
+a inversão de polo não é uma contradição de valor de verdade --- ``o autor deve ao
+réu'' e ``o réu deve ao autor'' podem ambas ser verdadeiras em um litígio com
+pedidos recíprocos --- e sim uma inversão de papéis temáticos, dimensão ortogonal
+à contradição. A hipótese é que a formulação, e não a capacidade do modelo, decida
+o resultado.
+
+A Figura~\ref{fig:reasoning} reporta os achados, e eles são mais nítidos que a
+hipótese previa. Sob a pergunta por papel temático, todos os três modelos
+identificam a inversão na quase totalidade dos casos --- Haiku $13/16$, Sonnet
+$15/16$, Opus $16/16$ ---, todos superando com folga o \textit{cross-encoder}
+($9/16$). Sob a pergunta por contradição, todos colapsam --- Haiku $7/16$, Sonnet
+$0/16$, Opus $3/16$. O salto entre as duas formulações, dentro de cada modelo, é de
+seis a quinze pares. A formulação domina.
+
+Mais revelador que as contagens é \emph{quais} pares cada formulação resolve. Os
+sete pares em que o \textit{cross-encoder} falhou são os de papéis recíprocos
+(apelante/apelada, credor/devedor, requerente/requerido e análogos), em que a
+troca produz duas frases logicamente compatíveis. Sob a pergunta por papel
+temático, os dois modelos maiores recuperam \emph{todos} os sete ($7/7$), e o
+modelo econômico, cinco; o \textit{cross-encoder} recuperara zero. A formulação
+correta ataca exatamente a fraqueza estrutural do paradigma de inferência.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{v4_reasoning.pdf}
+\caption{Verificação da inversão de polo por modelos de raciocínio. À esquerda:
+trocar a pergunta de ``contradição'' para ``papel temático'' eleva a detecção de
+quase zero a quase perfeita em todos os modelos, acima do \textit{cross-encoder}
+(linha tracejada). À direita: os pares recíprocos que o \textit{cross-encoder}
+errou ($0/7$) são recuperados pela pergunta por papel temático.}
+\label{fig:reasoning}
+\end{figure}
+
+Dois resultados merecem destaque, com a ressalva de que, sobre $16$ itens,
+diferenças de poucos pares entre modelos não são estatisticamente significativas;
+o que é robusto é o padrão, não o placar.
+
+O primeiro é o domínio da formulação. Que o modelo mais econômico, sob a pergunta
+correta, alcance $13/16$ e supere o \textit{cross-encoder} dedicado mostra que a
+verificação eficaz de polaridade não requer o modelo de maior capacidade; requer a
+pergunta que captura a estrutura argumental. O recurso decisivo não é a potência
+da ferramenta, mas a formulação da consulta.
+
+O segundo é contraintuitivo, e as justificativas espontâneas dos modelos o
+explicitam. Sob a formulação inadequada, a capacidade não ajuda: o modelo de
+fronteira não lidera. Sob ``contradição'', os acertos são Haiku $7$, Sonnet $0$,
+Opus $3$ --- a detecção não cresce com a capacidade, e o modelo mais caro fica
+abaixo do mais barato. A razão aparece nas respostas. Diante do par ``o autor deve
+indenizar o réu'' / ``o réu deve indenizar o autor'', o Opus respondeu que não há
+contradição, justificando que, em caso de danos recíprocos, ambos os deveres podem
+coexistir e ambas as frases podem ser verdadeiras ao mesmo tempo. O raciocínio é
+juridicamente correto sobre valor de verdade --- e é exatamente por ser correto na
+dimensão da contradição que falha na dimensão que importa, a do papel das partes.
+Mais capacidade aplicada à formulação errada não corrige o erro; produz uma recusa
+mais fundamentada da pergunta certa. O modelo econômico, menos cauteloso, por vezes
+respondeu ``contradição'' a esses mesmos pares --- acertando o rótulo pela razão
+errada, o que não é virtude e não se generaliza.
+
+Um achado lateral, registrado por honestidade, reforça a tese sob outro ângulo. Ao
+ser interrogado sobre o par que inverte credor e devedor, o modelo de fronteira
+identificou a troca de papéis e, não solicitado, apontou que uma das frases é
+juridicamente impossível, pois quem cede um crédito é necessariamente seu titular,
+o credor. A observação é correta e expõe uma limitação do próprio conjunto: alguns
+pares de inversão de polo, ao trocar mecanicamente os termos, geram uma frase
+incoerente em vez de meramente invertida, o que confunde a variável de interesse.
+Trata-se de ruído de construção a corrigir em uma versão ampliada do conjunto; não
+altera o padrão agregado, mas delimita a precisão dos itens individuais. De modo
+análogo, parte dos poucos erros sob a pergunta por papel temático decorreu de os
+modelos lerem ``papel'' como função sintática (ambas as partes são sujeito que
+sustenta tese) em vez de posição processual concreta --- ambiguidade da própria
+pergunta, que ilustra, ela mesma, que a verificação exige formulação precisa.
+
+A consequência estende a tese central do artigo à camada de raciocínio, sem
+contrariá-la. Na recuperação, a fragilidade se esconde atrás de um cosseno alto; na
+verificação por raciocínio, ela se esconde atrás da formulação plausível mas
+inadequada. Em ambos os casos, o que separa o acerto do erro não é o poder do
+modelo, e sim a competência de quem o opera --- na recuperação, saber que a
+similaridade alta é geometricamente enganosa; na verificação, saber que a pergunta
+deve interrogar o papel das partes, não a contradição lógica. A era do raciocínio
+não dispensa a alfabetização do operador; desloca-a da geometria do
+\textit{embedding} para a estrutura da pergunta de verificação.
+
+% ======================================================================
+\section{O que muda quando o operador entende a linguagem da máquina}
+
+Três deslocamentos concretos decorrem da perspectiva adotada. O primeiro, na
+verificação: quem entende que o modelo gera a continuação mais plausível para de
+pedir ao próprio modelo que confirme os fatos que produziu, e leva a verificação
+para a fonte primária. O segundo, na formulação da entrada: compreender o espelho
+reativo leva o operador a forçar o contraditório, pedindo a antítese e as objeções
+mais fortes à própria posição, em vez de entregar a tese pronta e convidar o
+sistema a fabricar suporte. O terceiro, e o que estes resultados tornam urgente,
+na arquitetura dos sistemas que o Direito constrói: quem projeta ou contrata um
+\textit{pipeline} de recuperação precisa saber que a similaridade absoluta de um
+\textit{embedding} é geometricamente enganosa, que a comparação entre modelos deve
+ser feita sobre métricas normalizadas e de \textit{ranking}, e que a polaridade ---
+sobretudo a inversão de polo --- exige mitigação explícita: \textit{reranking} de
+atenção cruzada, tratamento dedicado de pares dialéticos, verificação de
+polaridade independente do escore de similaridade. Essas são decisões linguísticas
+e geométricas antes de serem decisões de engenharia, e o jurista que não as
+entende terceiriza ao fornecedor escolhas que determinam se o sistema sustenta ou
+sabota o trabalho.
+
+% ======================================================================
+\section{Limitações, escopo e trabalho em andamento}
+\label{sec:limita}
+
+Convém ser explícito quanto ao estatuto deste estudo: ele é uma prova de conceito
+controlada, não um \textit{benchmark} de escala, e três limitações delimitam o que
+ele estabelece e o que fica para a continuação.
+
+\textit{Escala dos dados.} Os 40 pares foram construídos por um único autor com
+expertise de domínio. Eles ilustram mecanismos com intervalo de confiança
+reportado, e a convergência do padrão entre quatro modelos de gerações e
+geometrias distintas sugere robustez; mas não estabelecem distribuições
+populacionais, e os estratos de quantificador/modal permanecem pequenos ($n=4$).
+A extensão natural é ampliar e submeter os pares a anotação independente.
+
+\textit{Escala da recuperação.} A tarefa de recuperação usa um corpus reduzido
+(dois candidatos mais doze distratores). Ela isola a discriminação de polaridade e
+mostra que a margem que a sustenta é de milésimos, mas não \emph{prova} o colapso
+dessa margem sob ruído de produção. A continuação direta, para a qual o
+\textit{script} de replicação já está estruturado, é injetar os pares contrastivos
+em um acervo de milhares de \textit{chunks} minerados de jurisprudência pública e
+medir a degradação da margem em função do tamanho do corpus. A hipótese ---
+sustentada pela estreiteza já observada --- é que distratores reais estreitam, não
+alargam, a margem; convertê-la em evidência quantitativa é trabalho em andamento.
+
+\textit{Modelos proprietários.} Medimos quatro modelos abertos, um deles de
+fronteira. A espinha dorsal de parte do mercado jurídico são \textit{embeddings}
+proprietários (OpenAI, Cohere), que empregam técnicas próprias de redução de
+dimensionalidade. Sua geometria pode diferir, e testá-los é necessário para
+generalizar a afirmação ao cenário comercial completo. Registramos isto como
+limitação franca: a tese de que a anisotropia mascara a fragilidade está
+estabelecida para o modelo aberto de fronteira e fundamentada na literatura sobre
+o fenômeno, mas sua confirmação nos modelos fechados de maior uso comercial fica
+como passo seguinte.
+
+\textit{Método de isotropização.} Normalizar pela anisotropia é uma entre várias
+técnicas. Escolhemos a normalização por \textit{baseline} de pares mínimos por ser
+a mais transparente e diretamente interpretável \cite{heros2023}; uma validação
+cruzada por remoção de componentes principais (\textit{whitening}) é caminho
+complementar para confirmar que o reaparecimento da estrutura não depende do
+método particular.
+
+\textit{Validade dos pares de inversão de polo e robustez ao subconjunto limpo.}
+A inversão de polo sustenta a afirmação mais forte do artigo --- a de que é o
+estrato mais severo. Isso exige escrutínio dos próprios itens, pois inverter
+mecanicamente os papéis pode gerar não uma frase invertida, mas uma frase
+juridicamente impossível. Auditamos manualmente os $16$ pares: $12$ são
+inequivocamente coerentes (a inversão produz duas frases ambas possíveis em
+situações distintas), $3$ são limítrofes (ambíguos quanto a legitimidade ativa
+\textit{versus} passiva, mas não impossíveis) e $1$ é impossível --- o par que
+inverte credor e devedor, pois apenas o titular do crédito pode cedê-lo, defeito
+identificado espontaneamente pelo próprio modelo de fronteira. Reexecutamos as
+análises de que dispomos sobre o subconjunto de $12$ pares limpos, e o padrão não
+apenas sobrevive como se reforça. O \textit{cross-encoder} continua a falhar na
+mesma proporção (detecta contradição em $7/12$, contra $9/16$ no conjunto cheio), e
+a verificação por papel temático permanece quase perfeita (Opus e Sonnet $12/12$,
+Haiku $10/12$). Quanto à métrica geométrica, remedimos o cosseno normalizado da
+inversão de polo no e5 sobre os três conjuntos, e o resultado é o achado mais forte
+do artigo: o \textit{gap} normalizado entre a paráfrase de controle e a inversão de
+polo é \emph{negativo} --- $-0{,}016$ nos $16$ pares e $-0{,}034$ nos $12$ limpos.
+Um \textit{gap} negativo significa que o e5 atribui à inversão de polo um cosseno
+normalizado ($0{,}97$ no subconjunto limpo) \emph{superior} ao que atribui a duas
+paráfrases legítimas ($0{,}94$): o modelo considera ``o autor deve ao réu'' e ``o
+réu deve ao autor'' mais próximas entre si do que dois sinônimos verdadeiros. E o
+efeito é \emph{mais} forte nos pares limpos --- os pares imperfeitos atenuavam-no,
+de modo que a depuração reforça, em vez de comprometer, a afirmação de que a
+inversão de polo é o estrato mais severo. A contaminação existia, mas operava
+contra a tese, não a favor; removê-la fortalece o achado. (Distinga-se este
+\textit{gap} da inversão de polo isolada, negativo, do \textit{gap} médio de todos
+os estratos contrastivos reportado na Seção~\ref{sec:aniso}, de $0{,}09$; são
+granularidades distintas, e a inversão de polo é o estrato que puxa a fragilidade
+ao extremo.) O conjunto será ainda depurado e ampliado, com os pares limítrofes
+reescritos para isolar legitimidade ativa de passiva, em versão futura.
+
+\textit{Verificação por raciocínio.} O experimento da Seção~\ref{sec:reasoning}
+usa esses mesmos pares e três modelos de uma única família; suas contagens
+individuais estão sujeitas ao $n$ pequeno. O padrão central --- domínio da
+formulação sobre a capacidade e recuperação dos recíprocos --- é robusto, inclusive
+ao subconjunto limpo acima; as diferenças de poucos pares entre modelos não o são,
+e não são reivindicadas.
+
+Nenhuma dessas limitações enfraquece a tese central, que diz respeito à
+\emph{interpretação} dos escores de similaridade e foi confirmada em todos os
+modelos medidos. Elas delimitam a \emph{generalização} da evidência, e o caminho
+para ampliá-la está especificado e instrumentado.
+
+% ======================================================================
+\section{Conclusão}
+
+A tese é esta. O operador do Direito não precisa abordar a operação de IA pela
+perspectiva linguística porque ela é elegante, mas porque o objeto que opera é, na
+sua natureza mais profunda, um artefato linguístico e geométrico, e as falhas que
+ele produz têm a forma da representação distribucional do significado em um espaço
+vetorial enviesado. Este artigo tornou uma dessas falhas mensurável em português e
+mostrou algo que a intuição corrente inverte: o modelo de busca mais avançado não
+é mais seguro contra o erro de polaridade --- é mais perigoso, porque o esconde
+melhor. A inversão de polo resiste a quatro gerações de modelos e a uma arquitetura
+de inferência; o aprendizado contrastivo do modelo de fronteira não a removeu,
+apenas a deslocou para um regime anisotrópico onde um cosseno de $0{,}99$ disfarça
+uma discriminação de cinco milésimos. O operador que lê esse número como certeza
+comete o erro exato que a competência jurídica não o ensina a ver.
+
+A competência jurídica diz ao operador se um precedente é aplicável. Não lhe diz
+se a máquina o está recuperando porque o sustenta ou porque o contradiz, nem com
+que margem, nem se o escore de similaridade que ele exibe é discriminação real ou
+artefato da geometria do espaço. Para responder a essas perguntas, que decidem se
+a IA será instrumento ou armadilha, é preciso uma alfabetização que a formação
+jurídica tradicional não fornece e que nenhum manual de atalhos substitui. É
+preciso entender a linguagem da máquina --- e a geometria em que ela vive.
+
+% ======================================================================
+\paragraph{Disponibilidade de material.} O conjunto de pares mínimos e os scripts
+de medição (cosseno, normalização por anisotropia, \textit{cross-encoder} e
+recuperação) são reproduzíveis com \texttt{sentence-transformers} em CPU. Os
+resultados do modelo de fronteira foram obtidos com \texttt{multilingual-e5-large}.
+
+\paragraph{Declaração sobre uso de IA.} A redação foi assistida por ferramentas de
+IA sob revisão integral do autor. Os experimentos, dados e interpretação são de
+responsabilidade do autor.
+
+% ======================================================================
+\begin{thebibliography}{9}
+\small
+
+\bibitem{dahl2024}
+DAHL, M.; MAGESH, V.; SUZGUN, M.; HO, D.~E.
+\emph{Large Legal Fictions: Profiling Legal Hallucinations in Large Language
+Models}. Journal of Legal Analysis, v.~16, n.~1, p.~64--93, 2024.
+\url{https://doi.org/10.1093/jla/laae003}.
+
+\bibitem{ethayarajh2019}
+ETHAYARAJH, K.
+\emph{How Contextual are Contextualized Word Representations? Comparing the
+Geometry of BERT, ELMo, and GPT-2 Embeddings}. In: Proceedings of EMNLP-IJCNLP,
+2019, p.~55--65. \url{https://doi.org/10.18653/v1/D19-1006}.
+
+\bibitem{hammerl2023}
+HÄMMERL, K.; LIBOVICKÝ, J.; FRASER, A.
+\emph{Exploring Anisotropy and Outliers in Multilingual Language Models for
+Cross-Lingual Semantic Sentence Similarity}. In: Findings of ACL, 2023.
+\url{https://doi.org/10.18653/v1/2023.findings-acl.439}.
+
+\bibitem{harris1954}
+HARRIS, Z.~S.
+\emph{Distributional Structure}. Word, v.~10, n.~2--3, p.~146--162, 1954.
+\url{https://doi.org/10.1080/00437956.1954.11659520}.
+
+\bibitem{heros2023}
+LIN, Y.-T.; CHEN, Y.-N.
+\emph{HEROS: A Diagnostic Probe of Sentence Encoders via Minimal Pairs} (HEROS).
+Preprint, 2023. \url{https://arxiv.org/abs/2306.05083}.
+
+\bibitem{magesh2025}
+MAGESH, V.; SURANI, F.; DAHL, M.; SUZGUN, M.; MANNING, C.~D.; HO, D.~E.
+\emph{Hallucination-Free? Assessing the Reliability of Leading AI Legal Research
+Tools}. Journal of Empirical Legal Studies, 2025.
+\url{https://doi.org/10.1111/jels.12413}.
+
+\bibitem{mata2023}
+ESTADOS UNIDOS. United States District Court for the Southern District of New
+York. \emph{Mata v.\ Avianca, Inc.}, No. 22-cv-1461 (PKC). Opinion and Order on
+Sanctions, 22 jun. 2023.
+
+\bibitem{reimers2019}
+REIMERS, N.; GUREVYCH, I.
+\emph{Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}. In:
+Proceedings of EMNLP-IJCNLP, 2019, p.~3982--3992.
+\url{https://doi.org/10.18653/v1/D19-1410}.
+
+\end{thebibliography}
+
+\end{document}

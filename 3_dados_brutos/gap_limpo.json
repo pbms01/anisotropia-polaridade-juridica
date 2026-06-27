@@ -1,0 +1,8 @@
+{
+  "_descricao": "Remedicao do gap normalizado do e5 na inversao de polo sobre subconjuntos auditados (resposta a critica de contaminacao). gap = controle_norm - polo_norm; negativo = polo mais similar que parafrase.",
+  "_controle_norm_implicito": 0.94,
+  "todos": {"n": 16, "polo_norm": 0.953, "gap": -0.016},
+  "sem_impossivel": {"n": 15, "polo_norm": 0.953, "gap": -0.016},
+  "limpos": {"n": 12, "polo_norm": 0.972, "gap": -0.034},
+  "_interpretacao": "Gap negativo e MAIS forte nos 12 limpos (-0.034) que nos 16 (-0.016): os pares imperfeitos atenuavam o efeito. A auditoria fortalece a afirmacao 'estrato mais severo'."
+}

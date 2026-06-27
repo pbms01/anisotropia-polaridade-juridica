@@ -1,0 +1,37 @@
+{
+  "negacao_adverbial": {
+    "contr": 6,
+    "entail": 0,
+    "neutro": 0,
+    "n": 6,
+    "pC": 1.0
+  },
+  "antonimia_nucleo": {
+    "contr": 5,
+    "entail": 1,
+    "neutro": 0,
+    "n": 6,
+    "pC": 0.838
+  },
+  "inversao_polo": {
+    "contr": 9,
+    "entail": 6,
+    "neutro": 1,
+    "n": 16,
+    "pC": 0.569
+  },
+  "quant_modal": {
+    "contr": 4,
+    "entail": 0,
+    "neutro": 0,
+    "n": 4,
+    "pC": 1.0
+  },
+  "controle_parafrase": {
+    "contr": 2,
+    "entail": 6,
+    "neutro": 0,
+    "n": 8,
+    "pC": 0.231
+  }
+}

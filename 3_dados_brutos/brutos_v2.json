@@ -1,0 +1,608 @@
+{
+  "MiniLM": [
+    {
+      "par": "neg-01",
+      "categoria": "negacao_adverbial",
+      "cos": 0.5564
+    },
+    {
+      "par": "neg-02",
+      "categoria": "negacao_adverbial",
+      "cos": 0.6629
+    },
+    {
+      "par": "neg-03",
+      "categoria": "negacao_adverbial",
+      "cos": 0.4186
+    },
+    {
+      "par": "neg-04",
+      "categoria": "negacao_adverbial",
+      "cos": 0.5687
+    },
+    {
+      "par": "neg-05",
+      "categoria": "negacao_adverbial",
+      "cos": 0.6452
+    },
+    {
+      "par": "neg-06",
+      "categoria": "negacao_adverbial",
+      "cos": 0.4512
+    },
+    {
+      "par": "ant-01",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9553
+    },
+    {
+      "par": "ant-02",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.831
+    },
+    {
+      "par": "ant-03",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.4796
+    },
+    {
+      "par": "ant-04",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.5004
+    },
+    {
+      "par": "ant-05",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.6427
+    },
+    {
+      "par": "ant-06",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9377
+    },
+    {
+      "par": "pol-01",
+      "categoria": "inversao_polo",
+      "cos": 0.9889
+    },
+    {
+      "par": "pol-02",
+      "categoria": "inversao_polo",
+      "cos": 0.8987
+    },
+    {
+      "par": "pol-03",
+      "categoria": "inversao_polo",
+      "cos": 0.9223
+    },
+    {
+      "par": "pol-04",
+      "categoria": "inversao_polo",
+      "cos": 0.9085
+    },
+    {
+      "par": "pol-05",
+      "categoria": "inversao_polo",
+      "cos": 0.9888
+    },
+    {
+      "par": "pol-06",
+      "categoria": "inversao_polo",
+      "cos": 0.829
+    },
+    {
+      "par": "pol-07",
+      "categoria": "inversao_polo",
+      "cos": 0.9687
+    },
+    {
+      "par": "pol-08",
+      "categoria": "inversao_polo",
+      "cos": 0.9609
+    },
+    {
+      "par": "pol-09",
+      "categoria": "inversao_polo",
+      "cos": 0.9979
+    },
+    {
+      "par": "pol-10",
+      "categoria": "inversao_polo",
+      "cos": 0.9933
+    },
+    {
+      "par": "pol-11",
+      "categoria": "inversao_polo",
+      "cos": 0.984
+    },
+    {
+      "par": "pol-12",
+      "categoria": "inversao_polo",
+      "cos": 0.9873
+    },
+    {
+      "par": "pol-13",
+      "categoria": "inversao_polo",
+      "cos": 0.9607
+    },
+    {
+      "par": "pol-14",
+      "categoria": "inversao_polo",
+      "cos": 0.94
+    },
+    {
+      "par": "pol-15",
+      "categoria": "inversao_polo",
+      "cos": 0.9978
+    },
+    {
+      "par": "pol-16",
+      "categoria": "inversao_polo",
+      "cos": 0.995
+    },
+    {
+      "par": "mod-01",
+      "categoria": "quant_modal",
+      "cos": 0.5022
+    },
+    {
+      "par": "mod-02",
+      "categoria": "quant_modal",
+      "cos": 0.744
+    },
+    {
+      "par": "mod-03",
+      "categoria": "quant_modal",
+      "cos": 0.9186
+    },
+    {
+      "par": "mod-04",
+      "categoria": "quant_modal",
+      "cos": 0.6068
+    },
+    {
+      "par": "cpar-01",
+      "categoria": "controle_parafrase",
+      "cos": 0.8279
+    },
+    {
+      "par": "cpar-02",
+      "categoria": "controle_parafrase",
+      "cos": 0.7949
+    },
+    {
+      "par": "cpar-03",
+      "categoria": "controle_parafrase",
+      "cos": 0.9273
+    },
+    {
+      "par": "cpar-04",
+      "categoria": "controle_parafrase",
+      "cos": 0.9525
+    },
+    {
+      "par": "cpar-05",
+      "categoria": "controle_parafrase",
+      "cos": 0.9094
+    },
+    {
+      "par": "cpar-06",
+      "categoria": "controle_parafrase",
+      "cos": 0.9983
+    },
+    {
+      "par": "cpar-07",
+      "categoria": "controle_parafrase",
+      "cos": 0.9965
+    },
+    {
+      "par": "cpar-08",
+      "categoria": "controle_parafrase",
+      "cos": 0.9486
+    }
+  ],
+  "mpnet": [
+    {
+      "par": "neg-01",
+      "categoria": "negacao_adverbial",
+      "cos": 0.4976
+    },
+    {
+      "par": "neg-02",
+      "categoria": "negacao_adverbial",
+      "cos": 0.5429
+    },
+    {
+      "par": "neg-03",
+      "categoria": "negacao_adverbial",
+      "cos": 0.554
+    },
+    {
+      "par": "neg-04",
+      "categoria": "negacao_adverbial",
+      "cos": 0.4141
+    },
+    {
+      "par": "neg-05",
+      "categoria": "negacao_adverbial",
+      "cos": 0.4101
+    },
+    {
+      "par": "neg-06",
+      "categoria": "negacao_adverbial",
+      "cos": 0.5209
+    },
+    {
+      "par": "ant-01",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.8602
+    },
+    {
+      "par": "ant-02",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.8036
+    },
+    {
+      "par": "ant-03",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.8651
+    },
+    {
+      "par": "ant-04",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.559
+    },
+    {
+      "par": "ant-05",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.5508
+    },
+    {
+      "par": "ant-06",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9767
+    },
+    {
+      "par": "pol-01",
+      "categoria": "inversao_polo",
+      "cos": 0.9901
+    },
+    {
+      "par": "pol-02",
+      "categoria": "inversao_polo",
+      "cos": 0.8142
+    },
+    {
+      "par": "pol-03",
+      "categoria": "inversao_polo",
+      "cos": 0.9826
+    },
+    {
+      "par": "pol-04",
+      "categoria": "inversao_polo",
+      "cos": 0.9235
+    },
+    {
+      "par": "pol-05",
+      "categoria": "inversao_polo",
+      "cos": 0.9968
+    },
+    {
+      "par": "pol-06",
+      "categoria": "inversao_polo",
+      "cos": 0.911
+    },
+    {
+      "par": "pol-07",
+      "categoria": "inversao_polo",
+      "cos": 0.988
+    },
+    {
+      "par": "pol-08",
+      "categoria": "inversao_polo",
+      "cos": 0.9904
+    },
+    {
+      "par": "pol-09",
+      "categoria": "inversao_polo",
+      "cos": 0.9944
+    },
+    {
+      "par": "pol-10",
+      "categoria": "inversao_polo",
+      "cos": 0.9968
+    },
+    {
+      "par": "pol-11",
+      "categoria": "inversao_polo",
+      "cos": 0.9956
+    },
+    {
+      "par": "pol-12",
+      "categoria": "inversao_polo",
+      "cos": 0.9889
+    },
+    {
+      "par": "pol-13",
+      "categoria": "inversao_polo",
+      "cos": 0.9452
+    },
+    {
+      "par": "pol-14",
+      "categoria": "inversao_polo",
+      "cos": 0.9577
+    },
+    {
+      "par": "pol-15",
+      "categoria": "inversao_polo",
+      "cos": 0.9968
+    },
+    {
+      "par": "pol-16",
+      "categoria": "inversao_polo",
+      "cos": 0.994
+    },
+    {
+      "par": "mod-01",
+      "categoria": "quant_modal",
+      "cos": 0.3293
+    },
+    {
+      "par": "mod-02",
+      "categoria": "quant_modal",
+      "cos": 0.7242
+    },
+    {
+      "par": "mod-03",
+      "categoria": "quant_modal",
+      "cos": 0.6454
+    },
+    {
+      "par": "mod-04",
+      "categoria": "quant_modal",
+      "cos": 0.5504
+    },
+    {
+      "par": "cpar-01",
+      "categoria": "controle_parafrase",
+      "cos": 0.9709
+    },
+    {
+      "par": "cpar-02",
+      "categoria": "controle_parafrase",
+      "cos": 0.7631
+    },
+    {
+      "par": "cpar-03",
+      "categoria": "controle_parafrase",
+      "cos": 0.9653
+    },
+    {
+      "par": "cpar-04",
+      "categoria": "controle_parafrase",
+      "cos": 0.9152
+    },
+    {
+      "par": "cpar-05",
+      "categoria": "controle_parafrase",
+      "cos": 0.9575
+    },
+    {
+      "par": "cpar-06",
+      "categoria": "controle_parafrase",
+      "cos": 0.9975
+    },
+    {
+      "par": "cpar-07",
+      "categoria": "controle_parafrase",
+      "cos": 0.984
+    },
+    {
+      "par": "cpar-08",
+      "categoria": "controle_parafrase",
+      "cos": 0.9649
+    }
+  ],
+  "distiluse": [
+    {
+      "par": "neg-01",
+      "categoria": "negacao_adverbial",
+      "cos": 0.8094
+    },
+    {
+      "par": "neg-02",
+      "categoria": "negacao_adverbial",
+      "cos": 0.8863
+    },
+    {
+      "par": "neg-03",
+      "categoria": "negacao_adverbial",
+      "cos": 0.7719
+    },
+    {
+      "par": "neg-04",
+      "categoria": "negacao_adverbial",
+      "cos": 0.8791
+    },
+    {
+      "par": "neg-05",
+      "categoria": "negacao_adverbial",
+      "cos": 0.8759
+    },
+    {
+      "par": "neg-06",
+      "categoria": "negacao_adverbial",
+      "cos": 0.8409
+    },
+    {
+      "par": "ant-01",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9898
+    },
+    {
+      "par": "ant-02",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.8891
+    },
+    {
+      "par": "ant-03",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9591
+    },
+    {
+      "par": "ant-04",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.861
+    },
+    {
+      "par": "ant-05",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.879
+    },
+    {
+      "par": "ant-06",
+      "categoria": "antonimia_nucleo",
+      "cos": 0.9719
+    },
+    {
+      "par": "pol-01",
+      "categoria": "inversao_polo",
+      "cos": 0.9892
+    },
+    {
+      "par": "pol-02",
+      "categoria": "inversao_polo",
+      "cos": 0.8778
+    },
+    {
+      "par": "pol-03",
+      "categoria": "inversao_polo",
+      "cos": 0.9971
+    },
+    {
+      "par": "pol-04",
+      "categoria": "inversao_polo",
+      "cos": 0.9814
+    },
+    {
+      "par": "pol-05",
+      "categoria": "inversao_polo",
+      "cos": 0.9833
+    },
+    {
+      "par": "pol-06",
+      "categoria": "inversao_polo",
+      "cos": 0.8359
+    },
+    {
+      "par": "pol-07",
+      "categoria": "inversao_polo",
+      "cos": 0.9965
+    },
+    {
+      "par": "pol-08",
+      "categoria": "inversao_polo",
+      "cos": 0.9657
+    },
+    {
+      "par": "pol-09",
+      "categoria": "inversao_polo",
+      "cos": 0.9962
+    },
+    {
+      "par": "pol-10",
+      "categoria": "inversao_polo",
+      "cos": 0.9961
+    },
+    {
+      "par": "pol-11",
+      "categoria": "inversao_polo",
+      "cos": 0.9935
+    },
+    {
+      "par": "pol-12",
+      "categoria": "inversao_polo",
+      "cos": 0.9644
+    },
+    {
+      "par": "pol-13",
+      "categoria": "inversao_polo",
+      "cos": 0.9908
+    },
+    {
+      "par": "pol-14",
+      "categoria": "inversao_polo",
+      "cos": 0.9944
+    },
+    {
+      "par": "pol-15",
+      "categoria": "inversao_polo",
+      "cos": 0.9993
+    },
+    {
+      "par": "pol-16",
+      "categoria": "inversao_polo",
+      "cos": 0.9948
+    },
+    {
+      "par": "mod-01",
+      "categoria": "quant_modal",
+      "cos": 0.816
+    },
+    {
+      "par": "mod-02",
+      "categoria": "quant_modal",
+      "cos": 0.9454
+    },
+    {
+      "par": "mod-03",
+      "categoria": "quant_modal",
+      "cos": 0.9231
+    },
+    {
+      "par": "mod-04",
+      "categoria": "quant_modal",
+      "cos": 0.9209
+    },
+    {
+      "par": "cpar-01",
+      "categoria": "controle_parafrase",
+      "cos": 0.8239
+    },
+    {
+      "par": "cpar-02",
+      "categoria": "controle_parafrase",
+      "cos": 0.9459
+    },
+    {
+      "par": "cpar-03",
+      "categoria": "controle_parafrase",
+      "cos": 0.7773
+    },
+    {
+      "par": "cpar-04",
+      "categoria": "controle_parafrase",
+      "cos": 0.9871
+    },
+    {
+      "par": "cpar-05",
+      "categoria": "controle_parafrase",
+      "cos": 0.9027
+    },
+    {
+      "par": "cpar-06",
+      "categoria": "controle_parafrase",
+      "cos": 0.9924
+    },
+    {
+      "par": "cpar-07",
+      "categoria": "controle_parafrase",
+      "cos": 0.9946
+    },
+    {
+      "par": "cpar-08",
+      "categoria": "controle_parafrase",
+      "cos": 0.965
+    }
+  ]
+}

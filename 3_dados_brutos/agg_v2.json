@@ -1,0 +1,138 @@
+{
+  "agg": {
+    "MiniLM": {
+      "negacao_adverbial": {
+        "mu": 0.55,
+        "sd": 0.091,
+        "lo": 0.479,
+        "hi": 0.623,
+        "n": 6
+      },
+      "antonimia_nucleo": {
+        "mu": 0.724,
+        "sd": 0.194,
+        "lo": 0.569,
+        "hi": 0.874,
+        "n": 6
+      },
+      "inversao_polo": {
+        "mu": 0.958,
+        "sd": 0.046,
+        "lo": 0.934,
+        "hi": 0.978,
+        "n": 16
+      },
+      "quant_modal": {
+        "mu": 0.693,
+        "sd": 0.156,
+        "lo": 0.554,
+        "hi": 0.841,
+        "n": 4
+      },
+      "controle_parafrase": {
+        "mu": 0.919,
+        "sd": 0.069,
+        "lo": 0.869,
+        "hi": 0.964,
+        "n": 8
+      }
+    },
+    "mpnet": {
+      "negacao_adverbial": {
+        "mu": 0.49,
+        "sd": 0.058,
+        "lo": 0.444,
+        "hi": 0.535,
+        "n": 6
+      },
+      "antonimia_nucleo": {
+        "mu": 0.769,
+        "sd": 0.16,
+        "lo": 0.647,
+        "hi": 0.892,
+        "n": 6
+      },
+      "inversao_polo": {
+        "mu": 0.967,
+        "sd": 0.048,
+        "lo": 0.941,
+        "hi": 0.987,
+        "n": 16
+      },
+      "quant_modal": {
+        "mu": 0.562,
+        "sd": 0.148,
+        "lo": 0.408,
+        "hi": 0.685,
+        "n": 4
+      },
+      "controle_parafrase": {
+        "mu": 0.94,
+        "sd": 0.07,
+        "lo": 0.886,
+        "hi": 0.977,
+        "n": 8
+      }
+    },
+    "distiluse": {
+      "negacao_adverbial": {
+        "mu": 0.844,
+        "sd": 0.042,
+        "lo": 0.808,
+        "hi": 0.875,
+        "n": 6
+      },
+      "antonimia_nucleo": {
+        "mu": 0.925,
+        "sd": 0.05,
+        "lo": 0.887,
+        "hi": 0.965,
+        "n": 6
+      },
+      "inversao_polo": {
+        "mu": 0.972,
+        "sd": 0.045,
+        "lo": 0.948,
+        "hi": 0.991,
+        "n": 16
+      },
+      "quant_modal": {
+        "mu": 0.901,
+        "sd": 0.05,
+        "lo": 0.843,
+        "hi": 0.939,
+        "n": 4
+      },
+      "controle_parafrase": {
+        "mu": 0.924,
+        "sd": 0.077,
+        "lo": 0.866,
+        "hi": 0.973,
+        "n": 8
+      }
+    }
+  },
+  "gaps": {
+    "MiniLM": {
+      "contr": 0.804,
+      "ctrl": 0.919,
+      "gap": 0.115,
+      "lo": 0.032,
+      "hi": 0.199
+    },
+    "mpnet": {
+      "contr": 0.79,
+      "ctrl": 0.94,
+      "gap": 0.15,
+      "lo": 0.06,
+      "hi": 0.24
+    },
+    "distiluse": {
+      "contr": 0.93,
+      "ctrl": 0.924,
+      "gap": -0.007,
+      "lo": -0.069,
+      "hi": 0.049
+    }
+  }
+}

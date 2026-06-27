@@ -1,0 +1,39 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- Saidas geradas pelos scripts (regeneraveis) ----
+# os JSON de referencia versionados ficam em 3_dados_brutos/
+2_scripts_replicacao/resultado_e5.json
+2_scripts_replicacao/resultado_e5_norm.json
+2_scripts_replicacao/teste_prefixo_e5.json
+
+# ---- Artefatos transitorios de LaTeX ----
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+
+# ---- Caches de modelos Hugging Face ----
+.cache/
+hf_cache/
+
+# ---- Chaves e segredos ----
+.env
+*.key
+
+# ---- Script auxiliar de publicacao (local, nao versionar) ----
+/publicar_no_github.ps1
+
+# ---- Sistema operacional ----
+.DS_Store
+Thumbs.db

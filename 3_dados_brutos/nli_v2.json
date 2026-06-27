@@ -1,0 +1,242 @@
+[
+  {
+    "par": "neg-01",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "neg-02",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "neg-03",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "neg-04",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "neg-05",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "neg-06",
+    "categoria": "negacao_adverbial",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "ant-01",
+    "categoria": "antonimia_nucleo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "ant-02",
+    "categoria": "antonimia_nucleo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "ant-03",
+    "categoria": "antonimia_nucleo",
+    "pred": "contradiction",
+    "pC": 0.998
+  },
+  {
+    "par": "ant-04",
+    "categoria": "antonimia_nucleo",
+    "pred": "entailment",
+    "pC": 0.027
+  },
+  {
+    "par": "ant-05",
+    "categoria": "antonimia_nucleo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "ant-06",
+    "categoria": "antonimia_nucleo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "pol-01",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.999
+  },
+  {
+    "par": "pol-02",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.935
+  },
+  {
+    "par": "pol-03",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.005
+  },
+  {
+    "par": "pol-04",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.973
+  },
+  {
+    "par": "pol-05",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "pol-06",
+    "categoria": "inversao_polo",
+    "pred": "neutral",
+    "pC": 0.229
+  },
+  {
+    "par": "pol-07",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "pol-08",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.001
+  },
+  {
+    "par": "pol-09",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.999
+  },
+  {
+    "par": "pol-10",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.999
+  },
+  {
+    "par": "pol-11",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "pol-12",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.001
+  },
+  {
+    "par": "pol-13",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.968
+  },
+  {
+    "par": "pol-14",
+    "categoria": "inversao_polo",
+    "pred": "entailment",
+    "pC": 0.001
+  },
+  {
+    "par": "pol-15",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "pol-16",
+    "categoria": "inversao_polo",
+    "pred": "contradiction",
+    "pC": 0.996
+  },
+  {
+    "par": "mod-01",
+    "categoria": "quant_modal",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "mod-02",
+    "categoria": "quant_modal",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "mod-03",
+    "categoria": "quant_modal",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "mod-04",
+    "categoria": "quant_modal",
+    "pred": "contradiction",
+    "pC": 1.0
+  },
+  {
+    "par": "cpar-01",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "cpar-02",
+    "categoria": "controle_parafrase",
+    "pred": "contradiction",
+    "pC": 0.992
+  },
+  {
+    "par": "cpar-03",
+    "categoria": "controle_parafrase",
+    "pred": "contradiction",
+    "pC": 0.857
+  },
+  {
+    "par": "cpar-04",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.002
+  },
+  {
+    "par": "cpar-05",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "cpar-06",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "cpar-07",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.0
+  },
+  {
+    "par": "cpar-08",
+    "categoria": "controle_parafrase",
+    "pred": "entailment",
+    "pC": 0.0
+  }
+]

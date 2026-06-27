@@ -1,0 +1,65 @@
+{
+  "MiniLM": {
+    "acertos": 19,
+    "total": 20,
+    "taxa": 0.95,
+    "ic_lo": 0.85,
+    "ic_hi": 1.0,
+    "margem_media": 0.178,
+    "margem_min": -0.004,
+    "falhas": [
+      [
+        "o locatário devolve a caução",
+        0.846,
+        0.851
+      ]
+    ]
+  },
+  "mpnet": {
+    "acertos": 16,
+    "total": 20,
+    "taxa": 0.8,
+    "ic_lo": 0.6,
+    "ic_hi": 0.95,
+    "margem_media": 0.191,
+    "margem_min": -0.145,
+    "falhas": [
+      [
+        "a tutela de urgência foi concedida",
+        0.676,
+        0.821
+      ],
+      [
+        "a perícia foi autorizada",
+        0.24,
+        0.301
+      ],
+      [
+        "o executado tem legitimidade",
+        0.765,
+        0.877
+      ],
+      [
+        "o locatário devolve a caução",
+        0.869,
+        0.871
+      ]
+    ]
+  },
+  "distiluse": {
+    "acertos": 19,
+    "total": 20,
+    "taxa": 0.95,
+    "ic_lo": 0.85,
+    "ic_hi": 1.0,
+    "margem_media": 0.081,
+    "margem_min": -0.0,
+    "falhas": [
+      [
+        "os requisitos da aposentadoria estão presentes",
+        0.763,
+        0.764
+      ]
+    ]
+  }
+}

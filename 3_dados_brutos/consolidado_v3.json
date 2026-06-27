@@ -1,0 +1,59 @@
+{
+  "matriz_bruta": {
+    "negacao_adverbial": {
+      "MiniLM": 0.55,
+      "mpnet": 0.49,
+      "distiluse": 0.844,
+      "e5-large": 0.958
+    },
+    "antonimia_nucleo": {
+      "MiniLM": 0.724,
+      "mpnet": 0.769,
+      "distiluse": 0.925,
+      "e5-large": 0.977
+    },
+    "inversao_polo": {
+      "MiniLM": 0.958,
+      "mpnet": 0.967,
+      "distiluse": 0.972,
+      "e5-large": 0.993
+    },
+    "quant_modal": {
+      "MiniLM": 0.693,
+      "mpnet": 0.562,
+      "distiluse": 0.901,
+      "e5-large": 0.975
+    },
+    "controle_parafrase": {
+      "MiniLM": 0.919,
+      "mpnet": 0.94,
+      "distiluse": 0.924,
+      "e5-large": 0.991
+    }
+  },
+  "e5": {
+    "cos_avg": 0.8383,
+    "bruto": {
+      "negacao_adverbial": 0.958,
+      "antonimia_nucleo": 0.977,
+      "inversao_polo": 0.993,
+      "quant_modal": 0.975,
+      "controle_parafrase": 0.991
+    },
+    "norm": {
+      "negacao_adverbial": 0.743,
+      "antonimia_nucleo": 0.857,
+      "inversao_polo": 0.958,
+      "quant_modal": 0.846,
+      "controle_parafrase": 0.943
+    },
+    "gap_norm": 0.092,
+    "recup": {
+      "rank1": 10,
+      "oposta_acima": 0,
+      "margem_bruta_min": 0.0046,
+      "margem_norm_media": 0.1493,
+      "margem_norm_min": 0.0283
+    }
+  }
+}
