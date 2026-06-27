@@ -27,7 +27,6 @@ A correção fortaleceu a tese: o gap negativo da inversão de polo é universal
 - `2_scripts_replicacao/` scripts que geram cada resultado
 - `3_dados_brutos/` saídas brutas (JSON) que sustentam os números
 - `4_figuras_e_tabelas/` figuras (PDF) e tabelas (TeX) que o artigo compila
-- `6_revisoes_adversariais/` parecer adversarial que guiou as revisões
 
 ## Dependências
 

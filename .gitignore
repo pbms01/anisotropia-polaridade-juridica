@@ -15,6 +15,9 @@ venv/
 # ---- Historico de versoes do paper: fora do repositorio (permanece no disco) ----
 /5_historico_versoes/
 
+# ---- Parecer adversarial: fora do repositorio (permanece no disco) ----
+/6_revisoes_adversariais/
+
 # ---- Artefatos transitorios de LaTeX ----
 *.aux
 *.log
