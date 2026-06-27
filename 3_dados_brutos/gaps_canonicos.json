@@ -1,0 +1,128 @@
+{
+  "baselines": {
+    "MiniLM": 0.29,
+    "mpnet": 0.31,
+    "distiluse": 0.4,
+    "e5-large": 0.84
+  },
+  "tabela_antigos": {
+    "MiniLM": {
+      "negacao_adverbial": {
+        "n": 6,
+        "estr_norm": 0.367,
+        "gap": 0.52,
+        "ic": [
+          0.401,
+          0.646
+        ]
+      },
+      "antonimia_nucleo": {
+        "n": 6,
+        "estr_norm": 0.612,
+        "gap": 0.275,
+        "ic": [
+          0.048,
+          0.498
+        ]
+      },
+      "inversao_polo": {
+        "n": 16,
+        "estr_norm": 0.94,
+        "gap": -0.054,
+        "ic": [
+          -0.13,
+          0.018
+        ]
+      },
+      "quant_modal": {
+        "n": 4,
+        "estr_norm": 0.567,
+        "gap": 0.319,
+        "ic": [
+          0.084,
+          0.534
+        ]
+      }
+    },
+    "mpnet": {
+      "negacao_adverbial": {
+        "n": 6,
+        "estr_norm": 0.261,
+        "gap": 0.652,
+        "ic": [
+          0.547,
+          0.748
+        ]
+      },
+      "antonimia_nucleo": {
+        "n": 6,
+        "estr_norm": 0.666,
+        "gap": 0.247,
+        "ic": [
+          0.053,
+          0.45
+        ]
+      },
+      "inversao_polo": {
+        "n": 16,
+        "estr_norm": 0.952,
+        "gap": -0.039,
+        "ic": [
+          -0.127,
+          0.031
+        ]
+      },
+      "quant_modal": {
+        "n": 4,
+        "estr_norm": 0.366,
+        "gap": 0.547,
+        "ic": [
+          0.344,
+          0.782
+        ]
+      }
+    },
+    "distiluse": {
+      "negacao_adverbial": {
+        "n": 6,
+        "estr_norm": 0.74,
+        "gap": 0.133,
+        "ic": [
+          0.024,
+          0.235
+        ]
+      },
+      "antonimia_nucleo": {
+        "n": 6,
+        "estr_norm": 0.875,
+        "gap": -0.002,
+        "ic": [
+          -0.115,
+          0.106
+        ]
+      },
+      "inversao_polo": {
+        "n": 16,
+        "estr_norm": 0.954,
+        "gap": -0.081,
+        "ic": [
+          -0.184,
+          0.009
+        ]
+      },
+      "quant_modal": {
+        "n": 4,
+        "estr_norm": 0.836,
+        "gap": 0.037,
+        "ic": [
+          -0.082,
+          0.158
+        ]
+      }
+    }
+  },
+  "e5_polo": {
+    "todos": -0.016,
+    "limpos": -0.034
+  }
+}

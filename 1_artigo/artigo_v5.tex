@@ -54,13 +54,17 @@ espaço. O modelo de fronteira, porém, opera em um regime fortemente
 \emph{anisotrópico} --- a similaridade de cosseno entre duas sentenças jurídicas
 quaisquer, ainda que sem relação, é de $0{,}84$ --- de modo que ele atribui a uma
 sentença e à sua negação um cosseno bruto de $0{,}99$. Normalizada pelo
-\textit{baseline} anisotrópico, a discriminação reaparece e é, em termos
-relativos, \emph{menor} que a dos modelos antigos ($\textit{gap}$ normalizado de
-$0{,}09$ contra $0{,}27$); no estrato mais severo, a inversão de polo
-(autor\,$\leftrightarrow$\,réu), o \textit{gap} chega a ser \emph{negativo} --- o
-e5 considera a tese e sua inversão mais próximas entre si do que duas paráfrases
-legítimas. Na tarefa de recuperação, o modelo de fronteira acerta
-\emph{mais} ($10/10$ contra $8/10$), porém por uma margem de cosseno cujo mínimo
+\textit{baseline} anisotrópico, a fragilidade reaparece, e medi-la por estrato
+revela o que a média esconde: a negação adverbial é bem discriminada em todos os
+modelos, mas a inversão de polo (autor\,$\leftrightarrow$\,réu) tem
+\textit{gap} normalizado \emph{negativo ou nulo} --- em todas as gerações, antigas
+e de fronteira, o modelo considera a tese e sua inversão tão próximas ou mais
+próximas entre si quanto duas paráfrases legítimas. A fragilidade de polaridade é,
+portanto, invariante estrutural da representação distribucional, não defeito de um
+modelo; o que o modelo de fronteira acrescenta não é mais robustez, e sim
+anisotropia, que esconde a mesma falha atrás de um cosseno altíssimo. Na tarefa de
+recuperação temática, a margem de cosseno que separa a sentença correta da sua
+inversão de polo encolhe a poucos milésimos --- e no modelo de fronteira,
 é de cinco milésimos. A conclusão inverte a intuição corrente: o progresso da
 engenharia de \textit{embeddings} não tornou a polaridade mais robusta, mas
 deslocou sua fragilidade para um regime onde o operador, lendo um cosseno de
@@ -285,59 +289,110 @@ paráfrase (verde). A fragilidade estava lá, oculta pela geometria.}
 \label{fig:central}
 \end{figure}
 
-O dado que sintetiza o argumento é o \textit{gap} normalizado entre contrastivos e
-controle. Nos modelos antigos, medido sobre o mesmo corpus jurídico, o \textit{gap}
-do MiniLM é de $0{,}27$. No e5, é de $0{,}09$. Em termos relativos, descontada a
-geometria, o modelo de fronteira discrimina a polaridade \emph{menos} que o modelo
-antigo, não mais. O aprendizado contrastivo em larga escala, que a intuição
-supõe ter ``resolvido'' a insensibilidade ao sentido, não a resolveu para a
-inversão de polo; apenas a transferiu para um regime onde ela é mais difícil de
-detectar. Esse $0{,}09$ é a média de todos os estratos contrastivos; quando se
-isola a inversão de polo, o estrato mais severo, o \textit{gap} torna-se
-\emph{negativo} (Seção~\ref{sec:limita}) --- o e5 chega a considerar a tese e sua
-inversão mais próximas entre si do que duas paráfrases legítimas.
+O dado que sintetiza o argumento é o \textit{gap} normalizado entre cada estrato e
+o controle de paráfrase, definido como $\mathrm{norm}(\text{controle}) -
+\mathrm{norm}(\text{estrato})$: positivo quando o modelo separa o estrato da mera
+reformulação, negativo quando trata a perturbação de sentido como \emph{mais}
+inócua que uma paráfrase. Reportá-lo por estrato, e não como média única, é
+essencial, porque a média esconde a estrutura. A Tabela~\ref{tab:gaps} mostra o
+\textit{gap} por estrato nos três modelos abertos, com intervalo de confiança de
+95\% por \textit{bootstrap}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Estrato & MiniLM & mpnet & distiluse \\
+\midrule
+Negação adverbial & $+0{,}52$ & $+0{,}65$ & $+0{,}13$ \\
+Antonímia de núcleo & $+0{,}28$ & $+0{,}25$ & $-0{,}00$ \\
+\textbf{Inversão de polo} & $\mathbf{-0{,}05}$ & $\mathbf{-0{,}04}$ & $\mathbf{-0{,}08}$ \\
+Quantificador/modal & $+0{,}32$ & $+0{,}55$ & $+0{,}04$ \\
+\bottomrule
+\end{tabular}
+\caption{\textit{Gap} normalizado por estrato (controle menos estrato). A negação
+adverbial é fortemente positiva --- o modelo a discrimina bem. A inversão de polo é
+o único estrato com \textit{gap} negativo em todos os modelos: o modelo a trata
+como mais próxima da identidade que uma paráfrase legítima. O intervalo de
+confiança da inversão de polo aproxima-se de zero pelo lado positivo mas o ponto é
+consistentemente negativo nos três modelos; nos demais estratos o \textit{gap} é
+positivo com folga.}
+\label{tab:gaps}
+\end{table}
+
+A leitura é direta e desfaz a tentação da média. Em todos os modelos, a negação
+adverbial é bem discriminada, ao passo que a inversão de polo tem \textit{gap}
+negativo. Uma média agregada dos estratos seria positiva apenas porque a negação a
+puxa para cima, mascarando que, no estrato que importa, o sinal de polaridade
+colapsa abaixo de zero. E o ponto decisivo é que esse colapso \emph{não} é
+peculiar ao e5: ele aparece nas três gerações anteriores tanto quanto no modelo de
+fronteira, e no e5 o \textit{gap} da inversão de polo é igualmente negativo
+($-0{,}016$ sobre os $16$ pares, $-0{,}034$ sobre o subconjunto auditado de
+$12$; Seção~\ref{sec:limita}). A fragilidade de polaridade é, portanto, invariante
+estrutural da representação distribucional --- propriedade de representar
+significado por proximidade, não defeito de um modelo específico. O aprendizado
+contrastivo em larga escala do e5, que a intuição supõe ter ``resolvido'' a
+insensibilidade ao sentido, não a resolveu; manteve-a, e a vestiu de anisotropia,
+deslocando-a para um regime onde o cosseno bruto de $0{,}99$ a torna invisível ao
+operador.
 
 % ======================================================================
-\section{O paradoxo: o modelo que acerta mais esconde melhor a fragilidade}
+\section{A margem que sustenta a recuperação encolhe sob anisotropia}
 \label{sec:paradoxo}
 
 Poder-se-ia objetar que tudo isso é geometria sem consequência, desde que a
-recuperação funcione. Medimos, então, a tarefa-fim: para 10 consultas temáticas,
-com a sentença correta, sua oposta e doze distratores no corpus, o modelo rankeia
-a correta acima da oposta? A Figura~\ref{fig:paradoxo} reporta o resultado, e ele
-é o ponto mais importante do artigo.
+recuperação funcione. Medimos, então, a tarefa-fim: dada uma consulta temática, a
+sentença correta, sua oposta e um conjunto de distratores, o modelo rankeia a
+correta acima da oposta, e com que margem? Convém registrar de saída que esta
+medição usa um protocolo de prefixo distinto do da Seção~\ref{sec:aniso}: a
+recuperação é \emph{assimétrica} (\texttt{query:} na consulta, \texttt{passage:}
+nos candidatos), ao passo que a medição intrínseca do \textit{gap} é simétrica
+(\texttt{query:} em ambos os lados), conforme o uso recomendado para cada tarefa.
+São, portanto, números de dois experimentos diferentes, e não devem ser lidos como
+um placar único.
+
+Os três modelos abertos foram avaliados sobre $20$ consultas; o e5, sobre $10$.
+Nesse regime, a taxa de acerto de \textit{ranking} é alta em todos --- MiniLM e
+distiluse $19/20$, mpnet $16/20$, e5 $10/10$ ---, mas a diferença de taxa entre
+modelos não é o ponto, e não é estatisticamente sustentável com esse $n$: os
+intervalos de confiança binomiais se sobrepõem amplamente. O achado robusto não é
+quem acerta mais, e sim \emph{por que margem}, e onde ela se estreita. A
+Figura~\ref{fig:paradoxo} reporta a margem.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.86\textwidth]{v3_figC.pdf}
-\caption{O paradoxo do e5. Em azul, o acerto de \textit{ranking}: o e5 acerta
-\emph{mais} ($10/10$) que os modelos antigos ($8/10$). Em vermelho, a margem
-mínima de cosseno que sustenta esses acertos: no e5 ela é de cinco milésimos. O
-modelo melhor na tarefa é o que opera mais perto da indistinção.}
+\caption{Recuperação por modelo. O acerto de \textit{ranking} é alto em todos, mas
+a margem mínima de cosseno que sustenta esses acertos (em vermelho) estreita-se até
+o limiar da indistinção; no e5, cujo cosseno absoluto vive todo perto de $0{,}99$,
+a margem mínima é de cinco milésimos. As falhas dos modelos abertos concentram-se,
+ademais, em pares de inversão de polo.}
 \label{fig:paradoxo}
 \end{figure}
 
-O e5 é o melhor dos quatro na tarefa de recuperação: acerta todos os dez casos,
-contra oito dos modelos antigos, e nunca rankeia a oposta acima da correta. Mas a
-margem de cosseno que separa a correta da oposta é, no e5, de $0{,}005$ no pior
-caso --- sete vezes menor que a do MiniLM. O modelo que mais acerta é o que decide
-por margens mais finas, embutidas num espaço onde o cosseno absoluto de tudo é
-$0{,}99$.
+A margem é o que importa, e ela conta a história. Em todos os modelos, as poucas
+falhas de recuperação e as margens mínimas concentram-se em pares de inversão de
+polo: no MiniLM, a única falha é o par locador/locatário, com a oposta vencendo por
+quatro milésimos; no mpnet, entre as quatro falhas estão locador/locatário e
+exequente/executado. No e5, que não falha nas dez consultas, a margem mínima que
+separa a correta da oposta é de $0{,}005$ --- da mesma ordem de grandeza do ruído,
+e embutida num espaço onde o cosseno absoluto de tudo é $0{,}99$. O e5 acerta, mas
+decide por margens que são uma fração de centésimo dentro de um cone de altíssima
+similaridade.
 
 Esta é a armadilha, e é estritamente o erro que a competência jurídica não
 previne. O operador que projeta ou contrata um sistema de busca, ao comparar
 modelos, vê o e5 entregar similaridades de $0{,}99$ e conclui que ele ``entende''
 os documentos com altíssima confiança. O que ele não vê é que essa confiança
-aparente repousa sobre uma discriminação de polaridade de cinco milésimos, que é a
+aparente repousa sobre uma discriminação de polaridade de poucos milésimos, que é a
 primeira coisa a colapsar sob qualquer perturbação realista --- um documento mais
 longo que dilui o peso dos \textit{tokens} de polo, uma consulta ambígua, um
 \textit{reranker} mal calibrado, ruído de OCR. O estudo de Stanford sobre
 ferramentas jurídicas, no nível do produto, observa que documentos apenas
 textualmente parecidos são recuperados como relevantes e degradam a resposta
 \cite{magesh2025}; nossos resultados localizam, no componente de \textit{embedding}
-e na sua geometria, um dos mecanismos desse fenômeno, e mostram que ele se agrava,
-em vez de desaparecer, à medida que os modelos avançam --- porque o avanço vem
-acompanhado de maior anisotropia.
+e na sua geometria, um dos mecanismos desse fenômeno.
 
 % ======================================================================
 \section{A inversão de polo resiste à atenção cruzada}
@@ -357,9 +412,17 @@ A Tabela~\ref{tab:cross} e a Figura~\ref{fig:cross} mostram que essa expectativa
 confirma para a maioria dos estratos, mas falha exatamente onde o bi-encoder
 também falha pior. A negação adverbial e os quantificadores são detectados como
 contradição em $100\%$ dos casos ($6/6$ e $4/4$); a antonímia de núcleo, em
-$5/6$. O controle de paráfrase é corretamente \emph{não} classificado como
-contradição ($2/8$), validando o instrumento. A inversão de polo, porém, é
-detectada como contradição em apenas $9$ de $16$ casos.
+$5/6$. O controle de paráfrase é, em $6$ de $8$ casos, corretamente \emph{não}
+classificado como contradição. Os dois casos restantes são falsos positivos do
+instrumento --- ``indeferido''/``rejeitado'' e ``demanda''/``ação'', paráfrases
+legítimas que o modelo rotula como contradição, uma delas com confiança de
+$0{,}99$. Esse erro de $25\%$ no controle impõe cautela: o \textit{cross-encoder}
+não modela perfeitamente nem a sinonímia, de modo que sua taxa na inversão de polo
+não deve ser lida como medida limpa de papéis temáticos, e sim como sinal de uma
+arquitetura cujo desempenho já é imperfeito na tarefa simples. Feita essa ressalva,
+a inversão de polo é detectada como contradição em apenas $9$ de $16$ casos ---
+mais baixa que qualquer outro estrato, inclusive abaixo do que o ruído do
+instrumento no controle explicaria.
 
 \begin{table}[H]
 \centering
@@ -663,6 +726,36 @@ individuais estão sujeitas ao $n$ pequeno. O padrão central --- domínio da
 formulação sobre a capacidade e recuperação dos recíprocos --- é robusto, inclusive
 ao subconjunto limpo acima; as diferenças de poucos pares entre modelos não o são,
 e não são reivindicadas.
+
+\textit{Dependência entre controle e contrastivos.} O pareamento lexical do
+controle foi obtido, em três casos, reaproveitando como âncora uma das frases de um
+par contrastivo. Isso torna o Jaccard equiparado ($0{,}79$ contra $0{,}75$) um
+cuidado real, mas viola a independência entre os grupos que o \textit{bootstrap}
+pressupõe ao reamostrá-los separadamente; o intervalo de confiança do \textit{gap}
+pareado é, por isso, mais estreito que o verdadeiro. A direção do sinal não muda,
+mas a precisão reportada é otimista, e um \textit{bootstrap} pareado por âncora é o
+refinamento adequado.
+
+\textit{Operacionalização do critério de acerto na verificação por raciocínio.} As
+respostas livres dos modelos (Seção~\ref{sec:reasoning}) foram convertidas em
+verdadeiro/falso por um \textit{parser} de palavra-chave. Para um experimento cuja
+tese é que a formulação da pergunta decide o resultado, o critério de acerto deveria
+ser tão controlado quanto a pergunta; parte dos poucos erros decorreu de o modelo
+ler ``papel'' como função sintática, ambiguidade que o \textit{parser} não resolve.
+O protocolo de \textit{parsing} está no material de replicação, mas dupla anotação
+cega de uma amostra é o passo que faltaria para isolar a codificação do anotador.
+
+\textit{Família única, língua única, ausência de \textit{baseline} humano.} Três
+limites de generalização que as ressalvas acima não nomeiam. O experimento de
+raciocínio usa modelos de uma só família, que compartilham dados e alinhamento, de
+modo que ``a pergunta importa mais que o modelo'' está demonstrada \emph{dentro} de
+uma família e não entre fornecedores. Não há \textit{baseline} humano em nenhuma
+camada: a afirmação de que o operador lê o cosseno de $0{,}99$ como certeza é
+plausível e ancorada nos casos documentados, mas não medida, e onde não há medida
+do operador o texto deve ser lido no condicional. E os pares são frases isoladas,
+ao passo que a tese prática diz respeito a documentos longos em \textit{pipelines}
+RAG, onde a diluição dos \textit{tokens} de polo tende a agravar o efeito --- o que
+é hipótese coerente, não resultado medido.
 
 Nenhuma dessas limitações enfraquece a tese central, que diz respeito à
 \emph{interpretação} dos escores de similaridade e foi confirmada em todos os

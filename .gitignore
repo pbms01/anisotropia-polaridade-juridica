@@ -31,8 +31,9 @@ hf_cache/
 .env
 *.key
 
-# ---- Script auxiliar de publicacao (local, nao versionar) ----
+# ---- Scripts auxiliares (locais, nao versionar) ----
 /publicar_no_github.ps1
+/sincronizar_v5.ps1
 
 # ---- Sistema operacional ----
 .DS_Store

@@ -7,6 +7,25 @@ Este pacote contém tudo o que é necessário para verificação independente do
 resultados do artigo. Cada número reportado no paper pode ser reproduzido a partir
 dos scripts e dados aqui incluídos.
 
+## VERSÃO ATUAL: v5 (resposta à 3ª revisão adversarial)
+Use `artigo_v5.pdf` / `artigo_v5.tex`. v1 a v4 ficam no histórico (pasta 5).
+
+A 3ª revisão reproduziu o MiniLM ao milésimo e achou DOIS números fantasma — não
+reproduzíveis por nenhuma definição nos dados — que sustentavam o abstract. Ambos
+corrigidos na v5:
+1. O "0,27" (gap do MiniLM) não existia; as definições reais dão +0,188 (bruto) ou
+   -0,038 (só polo). APOSENTADO. `recalculo_canonico_gaps.py` recomputa todos os
+   gaps por estrato com IC95 e gera `gaps_canonicos.json`.
+2. O "8/10" da recuperação dos antigos não existia; os dados dão 19/20, 16/20,
+   19/20. Figura regenerada por `regen_figC.py`.
+
+O achado que a correção revelou é mais forte que o erro: o gap negativo da inversão
+de polo é UNIVERSAL (4 modelos), não só do e5. A fragilidade de polaridade é
+invariante estrutural; o e5 apenas a esconde sob anisotropia. Demais correções
+(ataques 3-8): paradoxo reancorado na margem, falsos positivos do cross-encoder
+reportados, módulos de prudência (dependência do controle, parser de reasoning,
+família/língua única, ausência de baseline humano).
+
 ---
 
 ## Estrutura do pacote

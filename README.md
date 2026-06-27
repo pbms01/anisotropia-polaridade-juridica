@@ -1,26 +1,33 @@
 # Cosseno 0,99 não é compreensão
 
-Pacote de replicação do artigo *Cosseno 0,99 não é compreensão: anisotropia, polaridade e a competência jurídica diante da recuperação densa*, de **Pedro Borges Mourão**.
+Pacote de replicação do artigo *Cosseno 0,99 não é compreensão: anisotropia, polaridade e a competência jurídica diante da recuperação densa*, de **Pedro Borges Mourão**. Versão atual: **v5**.
 
-Cada número reportado no paper pode ser reproduzido a partir dos scripts e dados aqui incluídos. O guia detalhado de verificação (mapa resultado → script → dado e passo a passo completo) está em [`LEIA-ME.md`](LEIA-ME.md).
+Cada número reportado no paper pode ser reproduzido a partir dos scripts e dados aqui incluídos. O guia detalhado de verificação (mapa resultado → script → dado e passo a passo) está em [`LEIA-ME.md`](LEIA-ME.md).
 
 ## O argumento em uma frase
 
-Similaridade de cosseno alta entre dois textos não é evidência de equivalência semântica: modelos de embedding denso colapsam inversões de polaridade jurídica (trocar autor por réu, credor por devedor) em vetores quase idênticos, e o efeito sobrevive à correção de anisotropia.
+Similaridade de cosseno alta entre dois textos não é evidência de equivalência semântica: modelos de embedding denso preservam a polaridade jurídica (afirmação contra negação, autor contra réu) como um sinal estruturalmente fraco, e a fraqueza atravessa as gerações de modelos.
 
 ## Achado central
 
-No modelo de fronteira `intfloat/multilingual-e5-large`, a inversão de polo registra cosseno bruto de aproximadamente 0,99. Depois de corrigir a anisotropia do espaço (baseline em torno de 0,84), o gap normalizado fica negativo: cerca de -0,016 nos 16 pares de inversão e -0,034 no subconjunto limpo de 12 pares. Em outras palavras, o modelo considera a inversão de polo *mais* próxima da identidade do que duas paráfrases legítimas do mesmo enunciado.
+Em quatro modelos abertos (MiniLM, mpnet, distiluse e o de fronteira multilingual-e5-large), a inversão de polo processual (autor para réu) tem gap normalizado negativo ou nulo: o modelo trata uma sentença e sua inversão de polo como mais próximas da identidade do que duas paráfrases legítimas. No e5-large isso fica encoberto pela anisotropia (cosseno em torno de 0,84 entre sentenças jurídicas quaisquer, e 0,99 entre uma sentença e sua negação); normalizada pelo baseline, a fragilidade reaparece. O padrão é um invariante estrutural, não uma idiossincrasia do e5.
 
-A recuperação temática acerta 10 de 10. Já a verificação por raciocínio com LLMs depende inteiramente do enquadramento: sob a instrução de "papel temático", Opus acerta 16/16, Sonnet 15/16 e Haiku 13/16; sob a instrução de "contradição", o desempenho desaba para 3/16, 0/16 e 7/16, respectivamente.
+## Novidades da v5 (resposta à 3ª revisão adversarial)
+
+A terceira revisão reproduziu o MiniLM ao milésimo e encontrou dois números que não se reproduziam por nenhuma definição nos dados. Ambos corrigidos:
+
+- O gap de 0,27 do MiniLM foi aposentado; as definições reais dão +0,188 (bruto) ou -0,038 (só polo). O `recalculo_canonico_gaps.py` recomputa todos os gaps por estrato com IC95 e gera `gaps_canonicos.json`.
+- A recuperação dos modelos antigos passou de "8/10" para os valores reais 19/20, 16/20 e 19/20, com a figura regenerada por `regen_figC.py`.
+
+A correção fortaleceu a tese: o gap negativo da inversão de polo é universal aos quatro modelos, e o e5 apenas o esconde sob anisotropia.
 
 ## Estrutura do pacote
 
-- `1_artigo/` manuscrito (PDF) e fonte LaTeX (v4, atual)
+- `1_artigo/` manuscrito v5 (PDF) e fonte LaTeX
 - `2_scripts_replicacao/` scripts que geram cada resultado
 - `3_dados_brutos/` saídas brutas (JSON) que sustentam os números
 - `4_figuras_e_tabelas/` figuras (PDF) e tabelas (TeX) que o artigo compila
-- `5_historico_versoes/` v1 a v3 do paper (rastreabilidade da evolução)
+- `5_historico_versoes/` v1 a v4 do paper (rastreabilidade da evolução)
 - `6_revisoes_adversariais/` parecer adversarial que guiou as revisões
 
 ## Dependências
@@ -38,12 +45,12 @@ Os modelos (MiniLM, mpnet, distiluse, `multilingual-e5-large` com cerca de 2,2 G
 ```
 cd 2_scripts_replicacao
 python experimento_v2.py             # cosseno + IC95 nos 3 modelos abertos
+python recalculo_canonico_gaps.py    # gaps canônicos por estrato + IC95 -> gaps_canonicos.json
 python experimento_e5_standalone.py  # e5-large: cosseno bruto da inversão de polo
 python experimento_e5_normalizado.py # normalização HEROS + anisotropia
-python remedicao_gap_limpo.py        # gap normalizado no subconjunto limpo
 ```
 
-Compare as saídas com os JSON de referência em `3_dados_brutos/`. O resultado esperado e o mapeamento completo de cada figura e tabela estão em [`LEIA-ME.md`](LEIA-ME.md).
+Compare as saídas com os JSON de referência em `3_dados_brutos/`. O mapeamento completo de cada figura e tabela está em [`LEIA-ME.md`](LEIA-ME.md).
 
 ## Como citar
 
@@ -52,7 +59,7 @@ Compare as saídas com os JSON de referência em `3_dados_brutos/`. O resultado 
   author = {Mour{\~a}o, Pedro Borges},
   title  = {Cosseno 0,99 n{\~a}o {\'e} compreens{\~a}o: anisotropia, polaridade e a compet{\^e}ncia jur{\'i}dica diante da recupera{\c c}{\~a}o densa},
   year   = {2026},
-  note   = {Preprint}
+  note   = {Preprint, v5}
 }
 ```
 
