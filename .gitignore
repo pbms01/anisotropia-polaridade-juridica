@@ -12,6 +12,9 @@ venv/
 2_scripts_replicacao/resultado_e5_norm.json
 2_scripts_replicacao/teste_prefixo_e5.json
 
+# ---- Historico de versoes do paper: fora do repositorio (permanece no disco) ----
+/5_historico_versoes/
+
 # ---- Artefatos transitorios de LaTeX ----
 *.aux
 *.log

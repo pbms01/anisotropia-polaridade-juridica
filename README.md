@@ -27,7 +27,6 @@ A correção fortaleceu a tese: o gap negativo da inversão de polo é universal
 - `2_scripts_replicacao/` scripts que geram cada resultado
 - `3_dados_brutos/` saídas brutas (JSON) que sustentam os números
 - `4_figuras_e_tabelas/` figuras (PDF) e tabelas (TeX) que o artigo compila
-- `5_historico_versoes/` v1 a v4 do paper (rastreabilidade da evolução)
 - `6_revisoes_adversariais/` parecer adversarial que guiou as revisões
 
 ## Dependências
@@ -65,4 +64,4 @@ Compare as saídas com os JSON de referência em `3_dados_brutos/`. O mapeamento
 
 ## Licença
 
-O código em `2_scripts_replicacao/` está sob a licença MIT (ver [`LICENSE`](LICENSE)). O texto e as figuras do artigo (`1_artigo/`, `4_figuras_e_tabelas/`, `5_historico_versoes/`) permanecem de autoria de Pedro Borges Mourão e são redistribuídos aqui para fins de verificação independente.
+O código em `2_scripts_replicacao/` está sob a licença MIT (ver [`LICENSE`](LICENSE)). O texto e as figuras do artigo (`1_artigo/`, `4_figuras_e_tabelas/`) permanecem de autoria de Pedro Borges Mourão e são redistribuídos aqui para fins de verificação independente.
